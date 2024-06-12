@@ -3,8 +3,11 @@ import 'package:chat_app/core/custom/custom_button.dart';
 import 'package:chat_app/core/custom/custom_textfield.dart';
 import 'package:chat_app/core/extensions/num_extension.dart';
 import 'package:chat_app/core/resources/constants.dart';
+import 'package:chat_app/feature/auth/login/logic/provider/auth_provider.dart';
 import 'package:chat_app/feature/auth/login/presentation/screens/register_screen.dart';
+import 'package:chat_app/feature/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,9 +19,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
+    final _authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -69,7 +73,16 @@ class _LoginScreenState extends State<LoginScreen> {
         child: CustomButton(
           text: 'Login',
           color: Colors.black,
-          onTap: () {},
+          onTap: () async {
+            try {
+              await _authProvider.signIn(
+                  _emailController.text, _passwordController.text);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HomeScreen()));
+            } catch (e) {
+              print(e);
+            }
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
