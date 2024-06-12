@@ -59,7 +59,7 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         controller: controller,
         onChanged: onChanged,
-        style: textStyle?? appstyle(14, textColor?? Colors.white, FontWeight.w400, -0.24),
+        style: textStyle,
         decoration: InputDecoration(
           errorStyle: appstyle(12,  Colors.red, FontWeight.w400, -0.24),
           isDense: true,

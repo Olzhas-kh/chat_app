@@ -3,7 +3,11 @@ import 'package:chat_app/core/custom/custom_button.dart';
 import 'package:chat_app/core/custom/custom_textfield.dart';
 import 'package:chat_app/core/extensions/num_extension.dart';
 import 'package:chat_app/core/resources/constants.dart';
+import 'package:chat_app/feature/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:chat_app/feature/auth/login/logic/provider/auth_provider.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,6 +23,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             140.height,
             CustomTextField(
+              
                 hintText: "Full Name",
                 controller: _fullNameController,
                 obscureText: false,
@@ -61,7 +68,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: CustomButton(
           text: 'Register',
           color: Colors.black,
-          onTap: () {},
+          onTap: () async{
+            try {
+              await authProvider.signUp(
+                  _emailController.text, _passwordController.text, _fullNameController.text);
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) => const HomeScreen()));
+            } catch (e) {
+              print(e);
+            }
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
